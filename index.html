@@ -213,7 +213,7 @@ mi_lab_custom_ranges: {
     localStorage.setItem("mi_auth_hash", DEMO_PIN_HASH);
     Object.entries(DEMO).forEach(([k, v]) => localStorage.setItem(k, JSON.stringify(v)));
     // Relative redirect: from /app/demo/ (production) → /app/; from /demo/ (dev) → /.
-    setTimeout(() => { window.location.href = "../"; }, 1800);
+    setTimeout(() => { window.location.href = "/app/"; }, 1800);
   } catch(e) {
     document.querySelector(".msg").textContent = "Error loading demo: " + e.message;
   }
