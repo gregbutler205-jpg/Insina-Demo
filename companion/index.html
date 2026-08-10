@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+<script>
+(function(){
+  try {
+    if (localStorage.getItem("mi_vault") === null && localStorage.getItem("mi_is_demo") !== "1") {
+      location.replace("/?next=companion");
+    }
+  } catch (e) {}
+})();
+</script>
+
+    <meta charset="UTF-8" />
+    <!-- Content-Security-Policy (S-03 / PG-05) — keep in sync with the root
+         index.html, which documents each allowlisted origin. Stripped during
+         `npm run dev` only (see vite.config.js). -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com; connect-src 'self' https://insina-health.onrender.com https://www.googleapis.com https://accounts.google.com https://clinicaltables.nlm.nih.gov; frame-src https://accounts.google.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- PWA / iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Insina" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#07090f" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="/companion/favicon.png" />
+    <link rel="apple-touch-icon" href="/companion/favicon.png" />
+
+    <!-- Companion manifest: own start_url + scope so iOS treats this as a
+         separate installed app from the full web app. -->
+    <link rel="manifest" href="/companion/manifest-companion.json" />
+
+    <title>Insina Companion</title>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Service Worker registration. External file (not inline) so script-src
+         can stay 'self' with no 'unsafe-inline' (S-03 / PG-05). -->
+    <script src="/companion/register-sw.js"></script>
+    <script type="module" crossorigin src="/companion/assets/companion-CdtvOcx1.js"></script>
+    <link rel="stylesheet" crossorigin href="/companion/assets/companion-DBQYQzwv.css">
+  </head>
+  <body style="background:#07090f; margin:0;">
+    <div id="root"></div>
+  </body>
+</html>
