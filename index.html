@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insina Health — Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #060a10;
+      color: #dde8f5;
+      font-family: 'Sora', system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .card {
+      text-align: center;
+      padding: 48px 40px;
+      background: #0b1220;
+      border: 1px solid #1a2f4a;
+      border-radius: 20px;
+      max-width: 380px;
+      width: 90%;
+    }
+    .logo { font-size: 28px; font-weight: 700; color: #4f8ef7; letter-spacing: -1px; margin-bottom: 8px; }
+    .sub  { font-size: 12px; color: #7eb8d8; font-family: 'DM Mono', monospace; margin-bottom: 32px; }
+    .spinner {
+      width: 36px; height: 36px; border: 3px solid #1a2f4a;
+      border-top-color: #4f8ef7; border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .msg  { font-size: 13px; color: #a8c4dc; margin-bottom: 12px; }
+    .pin  { font-size: 11px; color: #4a5c6a; font-family: 'DM Mono', monospace; }
+    .pin strong { color: #7eb8d8; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Insina Health</div>
+  <div class="sub">Demo Environment</div>
+  <div class="spinner"></div>
+  <div class="msg">Loading demo patient data…</div>
+  <div class="pin">Demo PIN: <strong>1234</strong></div>
+</div>
+
+<script>
+// ── Demo PIN hash (SHA-256 of "1234" + app salt) ─────────────────────────────
+const DEMO_PIN_HASH = "fc72e05e2a2c820e5cd0aa1c610ebb093bd5e1f86dc3b485d30d17dc45efccbf";
+
+// ── Demo dataset version ─────────────────────────────────────────────────────
+// Bump this string whenever DEMO below changes. A returning visitor whose
+// stored version differs gets a FULL demo reset instead of a plain overwrite.
+//
+// Why a reset is needed at all, given the seeder already rewrites every DEMO
+// key on each visit: using the demo creates keys that are NOT in DEMO, and a
+// plain overwrite never clears them. Deleting an appointment writes a
+// tombstone to mi_record_tombstones / mi_appt_tombstones (v1.44.0 deletion
+// memory, working exactly as designed); the next visit rewrites
+// mi_appointments fresh, but the surviving tombstone filters that record back
+// out — permanently, on that device. mi_lab_name_map (Group Tests),
+// mi_dismissed_alerts, the RIE audit and the insina_ai_* chat family drift the
+// same way. So the demo degrades the more it is used, and the person most
+// exposed is whoever demos it repeatedly on one laptop.
+//
+// Deliberately NOT tied to package.json's version: that would force a reset on
+// every unrelated release, including mid-demo. This changes only when the
+// dataset does.
+// The dataset and its version live in demo-record.json (one copy, shared with
+// the app's pilot-invite path, DEC-081). Loaded below before any write.
+const DEMO_RECORD_URL = "./demo-record.json";
+const DEMO_VERSION_KEY = "mi_demo_dataset_version";
+
+// ── Demo dataset ─────────────────────────────────────────────────────────────
+
+// ── Write to localStorage and redirect ───────────────────────────────────────
+window.__demoSeeding = (async function() {
+  try {
+    // ── Data-loss guard (hardened) ───────────────────────────────────────────
+    // The demo NEVER clears storage and NEVER overwrites a real record. It runs
+    // only on an empty device or one that already holds this same demo dataset.
+    // Any sign of a real record — an encrypted vault, a non-demo PIN, or real
+    // health data — and the demo refuses outright. This is the fix for the
+    // incident where a cached older demo wiped a live record.
+    // "mi_is_demo" is the unambiguous demo marker — safer than the PIN hash,
+    // which a real user could legitimately share (e.g. a real PIN of 1234).
+    const isDemoDevice = localStorage.getItem("mi_is_demo") === "1";
+    const HEALTH_KEYS = ["mi_meds_full", "mi_labs", "mi_conditions", "mi_profile_personal", "mi_documents", "mi_records"];
+    const hasHealthData = HEALTH_KEYS.some(k => localStorage.getItem(k) !== null);
+    if (localStorage.getItem("mi_vault") !== null || (hasHealthData && !isDemoDevice)) {
+      document.querySelector(".spinner").style.display = "none";
+      document.querySelector(".msg").innerHTML =
+        "You already have a record on this device.<br/>The demo won't load, so your data is untouched.";
+      document.querySelector(".pin").innerHTML = '<a href="../" style="color:#7eb8d8">Open my record →</a>';
+      return;
+    }
+    // Reached only on an empty device or one already proven to be a demo:
+    // the guard above returned for anything carrying a real record.
+
+    // ── Version-aware reset ──────────────────────────────────────────────────
+    // Stale dataset (or ?reset=1) → clear the demo's own keys so leftovers from
+    // previous visits can't shadow the fresh data. Anything already on this
+    // device is demo data by the guard above, so there is nothing to preserve.
+    const forcedReset = new URLSearchParams(location.search).has("reset");
+    const loaded = await (await fetch(DEMO_RECORD_URL, { cache: "no-store" })).json();
+    const DEMO = loaded.record;
+    const DEMO_DATASET_VERSION = loaded.version;
+    const staleDataset = localStorage.getItem(DEMO_VERSION_KEY) !== DEMO_DATASET_VERSION;
+
+    if (staleDataset || forcedReset) {
+      // Defence in depth. The guard already returned on a vault, so this can
+      // only fire if that logic is ever changed — in which case we refuse
+      // rather than delete. This file has wiped a live record once (2026-07-19);
+      // it does not get a second chance.
+      if (localStorage.getItem("mi_vault") !== null) {
+        throw new Error("refusing to reset: a vault is present");
+      }
+      // Enumerate first, then delete — removing while iterating by index skips
+      // entries. Scoped to the app's own prefixes; nothing else on the origin
+      // is touched, and clear() is still never used.
+      const doomed = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && (k.startsWith("mi_") || k.startsWith("insina_"))) doomed.push(k);
+      }
+      doomed.forEach(k => localStorage.removeItem(k));
+      document.querySelector(".msg").textContent = "Refreshing demo data…";
+    }
+
+    localStorage.setItem("mi_is_demo", "1");
+    localStorage.setItem("mi_auth_hash", DEMO_PIN_HASH);
+    // Same dataset version, no forced reset: keep what is already on the
+    // device and add only the keys that are missing, so a visitor's edits
+    // (Greg, 2026-09-15: "the Health Profile information is not saving")
+    // survive coming back through this page. A stale version or ?reset=1
+    // took the reset branch above and lands here with an empty slate.
+    const fresh = staleDataset || forcedReset;
+    Object.entries(DEMO).forEach(([k, v]) => {
+      if (fresh || localStorage.getItem(k) === null) localStorage.setItem(k, JSON.stringify(v));
+    });
+    // Written LAST: if anything above throws, the version stays stale and the
+    // next visit retries the reset rather than assuming it succeeded.
+    localStorage.setItem(DEMO_VERSION_KEY, DEMO_DATASET_VERSION);
+    // Where to hand off to. The companion lives on the same origin and shares
+    // this storage, but it is NOT reachable without seeding first — nothing
+    // links to it, so a visitor arriving at /companion/ directly would have an
+    // empty record and be asked to create a password. The demo build injects a
+    // guard there that bounces here with ?next=companion; honour it so they
+    // land back on the phone UI rather than the web app.
+    const goCompanion = new URLSearchParams(location.search).get("next") === "companion";
+
+    // Relative redirect: from /app/demo/ (production) → /app/; from /demo/ (dev) → /.
+    setTimeout(() => {
+      if (goCompanion) { window.location.href = "/companion/"; return; }
+      window.location.href = "/app/";
+    }, 1800);
+  } catch(e) {
+    document.querySelector(".msg").textContent = "Error loading demo: " + e.message;
+  }
+})();
+</script>
+</body>
+</html>
