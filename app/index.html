@@ -12,9 +12,14 @@
          AI call now goes through the proxy (A-02 landed); the browser never
          talks to Anthropic directly. style-src 'unsafe-inline'
          is accepted debt: inline styles are pervasive in the codebase.
+          is replaced at build time from .env.production
+         (DEC-104 rule 6): a health system's authorize, token and FHIR hosts, one
+         system per release, empty until the first production registration. The
+         sandbox host is never in the production file.
          Stripped during `npm run dev` only (see vite.config.js) because the
          React dev plugin injects an inline refresh preamble. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com; connect-src 'self' https://insina-health.onrender.com https://www.googleapis.com https://accounts.google.com https://clinicaltables.nlm.nih.gov; frame-src https://accounts.google.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com; connect-src 'self' https://insina-health.onrender.com https://www.googleapis.com https://accounts.google.com https://clinicaltables.nlm.nih.gov ; frame-src https://accounts.google.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
     <!-- PWA / iOS -->
@@ -49,7 +54,7 @@
          inline versions: the manifest swap runs synchronously in head. -->
     <script src="/app/companion-manifest-init.js"></script>
     <script src="/app/register-sw.js"></script>
-    <script type="module" crossorigin src="/app/assets/main-BBqIhoM9.js"></script>
+    <script type="module" crossorigin src="/app/assets/main-ZD0XPIMX.js"></script>
     <link rel="stylesheet" crossorigin href="/app/assets/main-CEl8ZXTa.css">
   </head>
   <body style="background:#07090f; margin:0;">
