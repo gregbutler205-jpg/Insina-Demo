@@ -7,8 +7,8 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #060a10;
-      color: #dde8f5;
+      background: #EEF5FC; /* DEC-126: the demo opens in light blue */
+      color: #1B2B3A;
       font-family: 'Sora', system-ui, sans-serif;
       display: flex;
       align-items: center;
@@ -18,24 +18,24 @@
     .card {
       text-align: center;
       padding: 48px 40px;
-      background: #0b1220;
-      border: 1px solid #1a2f4a;
+      background: #FFFFFF;
+      border: 1px solid #D9E6F2;
       border-radius: 20px;
       max-width: 380px;
       width: 90%;
     }
-    .logo { font-size: 28px; font-weight: 700; color: #4f8ef7; letter-spacing: -1px; margin-bottom: 8px; }
-    .sub  { font-size: 12px; color: #7eb8d8; font-family: 'DM Mono', monospace; margin-bottom: 32px; }
+    .logo { font-size: 28px; font-weight: 700; color: #1F6FB2; letter-spacing: -1px; margin-bottom: 8px; }
+    .sub  { font-size: 12px; color: #155A92; font-family: 'DM Mono', monospace; margin-bottom: 32px; }
     .spinner {
-      width: 36px; height: 36px; border: 3px solid #1a2f4a;
-      border-top-color: #4f8ef7; border-radius: 50%;
+      width: 36px; height: 36px; border: 3px solid #D9E6F2;
+      border-top-color: #1F6FB2; border-radius: 50%;
       animation: spin .8s linear infinite;
       margin: 0 auto 20px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .msg  { font-size: 13px; color: #a8c4dc; margin-bottom: 12px; }
-    .pin  { font-size: 11px; color: #4a5c6a; font-family: 'DM Mono', monospace; }
-    .pin strong { color: #7eb8d8; }
+    .msg  { font-size: 13px; color: #33475A; margin-bottom: 12px; }
+    .pin  { font-size: 11px; color: #4E6275; font-family: 'DM Mono', monospace; }
+    .pin strong { color: #155A92; }
   </style>
 </head>
 <body>
@@ -94,7 +94,7 @@ window.__demoSeeding = (async function() {
       document.querySelector(".spinner").style.display = "none";
       document.querySelector(".msg").innerHTML =
         "You already have a record on this device.<br/>The demo won't load, so your data is untouched.";
-      document.querySelector(".pin").innerHTML = '<a href="../" style="color:#7eb8d8">Open my record →</a>';
+      document.querySelector(".pin").innerHTML = '<a href="../" style="color:#155A92">Open my record →</a>';
       return;
     }
     // Reached only on an empty device or one already proven to be a demo:

@@ -28,6 +28,8 @@
     <meta name="apple-mobile-web-app-title" content="Insina Health" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#07090f" />
+    <!-- DEC-126: the chosen look, set before the app renders (external file: CSP script-src 'self') -->
+    <script src="/app/theme-init.js"></script>
 
     <!-- UI-8: fonts loaded ONCE here — previously every tab's <style> block
          re-declared this same @import (16 files). CSP above already allows
@@ -54,10 +56,10 @@
          inline versions: the manifest swap runs synchronously in head. -->
     <script src="/app/companion-manifest-init.js"></script>
     <script src="/app/register-sw.js"></script>
-    <script type="module" crossorigin src="/app/assets/main-BFyDIftJ.js"></script>
-    <link rel="stylesheet" crossorigin href="/app/assets/main-CEl8ZXTa.css">
+    <script type="module" crossorigin src="/app/assets/main-Bxw0kR33.js"></script>
+    <link rel="stylesheet" crossorigin href="/app/assets/main-Cw8Jz7mL.css">
   </head>
-  <body style="background:#07090f; margin:0;">
+  <body style="margin:0;">
     <div id="root"></div>
   </body>
 </html>
