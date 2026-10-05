@@ -28,6 +28,12 @@
     <!-- DEC-126: the chosen look, set before the app renders (external file: CSP script-src 'self') -->
     <script src="/companion/theme-init.js"></script>
 
+    <!-- Fonts: the same set the web app loads in index.html (UI-8). The phone
+         page never loaded them, so phones showed system fonts. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" />
+
     <!-- Icons -->
     <link rel="icon" type="image/png" href="/companion/favicon.png" />
     <link rel="apple-touch-icon" href="/companion/favicon.png" />
@@ -44,8 +50,8 @@
     <!-- Service Worker registration. External file (not inline) so script-src
          can stay 'self' with no 'unsafe-inline' (S-03 / PG-05). -->
     <script src="/companion/register-sw.js"></script>
-    <script type="module" crossorigin src="/companion/assets/companion-D5YmT-VT.js"></script>
-    <link rel="stylesheet" crossorigin href="/companion/assets/companion-Cw8Jz7mL.css">
+    <script type="module" crossorigin src="/companion/assets/companion-tj_JqBHH.js"></script>
+    <link rel="stylesheet" crossorigin href="/companion/assets/companion-BP2lZc7Q.css">
   </head>
   <body style="margin:0;">
     <div id="root"></div>
