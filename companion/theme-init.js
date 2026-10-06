@@ -8,7 +8,7 @@
 // for trying the light look while the screens are converted (spec section 8).
 // DEFAULT_THEME must match src/lib/theme.js (pinned by scripts/testTheme.mjs).
 (function () {
-  var DEFAULT_THEME = 'light';
+  var DEFAULT_THEME = 'light'; // light blue for everyone since v1.103.0 (DEC-126)
   var SHOW_CHOICE = true; // the demo build sets both of these (scripts/build-demo.mjs)
   var KEY = 'insina_theme';
   var theme = null;
