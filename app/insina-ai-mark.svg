@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Insina AI mark</title>
+  <desc id="desc">Blue four-point spark with a white health pulse line.</desc>
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="70%" x2="100%" y2="25%">
+      <stop offset="0%" stop-color="#1647D9"/>
+      <stop offset="52%" stop-color="#1388F2"/>
+      <stop offset="100%" stop-color="#20C7E8"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="25%" y1="100%" x2="75%" y2="0%">
+      <stop offset="0%" stop-color="#0C66E4" stop-opacity=".92"/>
+      <stop offset="100%" stop-color="#8BE8FF" stop-opacity=".82"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Primary spark -->
+  <path fill="url(#g1)"
+        d="M256 20
+           C271 118 333 201 486 256
+           C335 274 287 335 256 492
+           C228 343 175 284 26 256
+           C177 235 232 156 256 20Z"/>
+
+  <!-- Inner highlight for depth -->
+  <path fill="url(#g2)" opacity=".75"
+        d="M256 63
+           C269 143 314 214 431 256
+           C320 274 281 323 256 447
+           C233 329 191 283 81 256
+           C194 239 237 175 256 63Z"/>
+
+  <!-- Pulse line -->
+  <path d="M71 258
+           H173
+           L201 311
+           L240 181
+           L278 340
+           L308 258
+           H441"
+        fill="none"
+        stroke="#FFFFFF"
+        stroke-width="12"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+</svg>
