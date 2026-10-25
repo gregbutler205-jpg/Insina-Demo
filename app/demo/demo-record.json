@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-18.1",
+  "version": "2026-10-24.1",
   "record": {
     "mi_profile_personal": {
       "name": "Alex Rivera",
@@ -3932,7 +3932,9 @@
         "relationship": "Spouse",
         "phone": "(555) 847-3042",
         "email": "maria.rivera@example.com",
-        "primary": true
+        "primary": true,
+        "authority": "Medical power of attorney",
+        "documentAt": "Copy on file at University Medical Center Transplant Center"
       },
       {
         "id": 1700000061,
