@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- v1.122.0 (DEC-142): the page an Insina emergency QR code opens. The
+         details are in the address after "#", which the browser never sends
+         to the server. This policy allows no connections of any kind, so the
+         page cannot send them anywhere either. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Emergency medical information</title>
+    <link rel="stylesheet" href="./emergency.css" />
+    <script type="module" src="./emergency.js"></script>
+  </head>
+  <body>
+    <header class="bar">EMERGENCY MEDICAL INFORMATION</header>
+    <main id="out">
+      <p class="note">Reading the code…</p>
+    </main>
+    <noscript><p class="note">This page needs JavaScript to read the code.</p></noscript>
+  </body>
+</html>
